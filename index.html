@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoGuyane - Le Défi Géographique</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>🌴 GeoGuyane</h1>
+        <p>Testez votre connaissance du territoire guyanais !</p>
+        <div class="scoreboard">
+            <span>Score actuel : <strong id="score">0</strong></span>
+            <span>🏆 Meilleur score : <strong id="best-score">0</strong></span>
+        </div>
+    </header>
+
+    <main>
+        <div class="game-panel">
+            <div id="question-box">
+                <span class="badge" id="category-badge">Commune</span>
+                <h2 id="target-name">Chargement...</h2>
+                <p id="target-hint">Cliquez sur la carte là où vous pensez que ce lieu se situe.</p>
+            </div>
+
+            <div id="feedback-box" class="hidden">
+                <p id="feedback-text"></p>
+                <p id="anecdote-text" class="anecdote"></p>
+                <button id="next-btn">Lieu suivant ➔</button>
+            </div>
+
+            <div id="end-box" class="hidden">
+                <h2>Partie terminée ! 🎉</h2>
+                <p id="final-summary"></p>
+                <button id="restart-btn">Rejouer</button>
+            </div>
+        </div>
+
+        <div class="map-container">
+            <!-- Carte stylisée interactive de la Guyane (Coordonnées en %) -->
+            <svg id="guyane-map" viewBox="0 0 500 550" xmlns="http://w3.org">
+                <!-- Océan Atlantique -->
+                <rect width="500" height="550" fill="#cce7f0" rx="15"/>
+                <text x="360" y="60" fill="#0077b6" font-weight="bold" font-size="14">Océan Atlantique</text>
+                
+                <!-- Territoire de la Guyane (Polygone simplifié fidèle aux frontières) -->
+                <polygon id="territory" 
+                    points="160,55 240,95 310,135 375,185 350,245 330,310 345,380 315,455 250,490 185,480 135,445 95,380 110,300 95,210 120,120" 
+                    fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
+
+                <!-- Repères des fleuves frontaliers -->
+                <text x="55" y="250" fill="#1b4332" font-size="12" transform="rotate(-75 55,250)">Fleuve Maroni (Suriname)</text>
+                <text x="375" y="330" fill="#1b4332" font-size="12" transform="rotate(70 375,330)">Fleuve Oyapock (Brésil)</text>
+
+                <!-- Marqueurs dynamiques (Clic joueur, Vraie position, Ligne de distance) -->
+                <line id="distance-line" x1="0" y1="0" x2="0" y2="0" stroke="#ffb703" stroke-width="3" stroke-dasharray="6" class="hidden"/>
+                <circle id="player-marker" cx="0" cy="0" r="8" fill="#e63946" stroke="#fff" stroke-width="2" class="hidden"/>
+                <circle id="target-marker" cx="0" cy="0" r="8" fill="#ffb703" stroke="#fff" stroke-width="2" class="hidden"/>
+            </svg>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
