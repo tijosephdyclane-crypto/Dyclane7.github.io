@@ -20,6 +20,7 @@ L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO'
 }).addTo(map);
 
+
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
 
