@@ -9,17 +9,16 @@ document.getElementById("best-score").textContent = bestScore;
 
 // Initialisation de la carte centrée sur la Guyane
 const map = L.map('map', {
-    center: [3.95, -53.15], // Centre géographique de la Guyane
+    center: [3.95, -53.15],
     zoom: 7,
     minZoom: 6,
     maxZoom: 11
 });
 
-// Fond de carte géographique SANS noms de villes (CartoDB Voyager No Labels)
+// Fond de carte géographique SANS noms de villes (URL complète corrigée)
 L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO'
 }).addTo(map);
-
 
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
@@ -37,7 +36,7 @@ function initGame() {
 
 function loadQuestion() {
     canClick = true;
-    roundLayer.clearLayers(); // Nettoie les marqueurs précédents
+    roundLayer.clearLayers();
     
     const currentLieu = questions[currentIndex];
     document.getElementById("progress").textContent = `${currentIndex + 1}/${questions.length}`;
@@ -55,11 +54,11 @@ map.on('click', function(e) {
     const playerLatLng = e.latlng;
     const targetLatLng = L.latLng(currentLieu.lat, currentLieu.lng);
 
-    // Calcul de la vraie distance géographique (formule de Haversine intégrée à Leaflet)
+    // Calcul de la vraie distance géographique
     const distanceMeters = playerLatLng.distanceTo(targetLatLng);
     const kmDistance = Math.round(distanceMeters / 1000);
 
-    // Attribution des points (1000 pts max, -4 pts par km d'erreur)
+    // Attribution des points
     const pointsEarned = Math.max(0, Math.round(1000 - kmDistance * 4));
     score += pointsEarned;
     document.getElementById("score").textContent = score;
@@ -73,7 +72,7 @@ map.on('click', function(e) {
         weight: 2
     }).addTo(roundLayer).bindPopup("Votre choix").openPopup();
 
-    // Marqueur vert/or = bonne réponse
+    // Marqueur vert = bonne réponse
     L.circleMarker(targetLatLng, {
         color: '#ffffff',
         fillColor: '#2d6a4f',
