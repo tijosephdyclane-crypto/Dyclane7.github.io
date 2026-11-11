@@ -4,15 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoGuyane - Le Défi Géographique</title>
+    <!-- Feuille de style Leaflet pour la vraie carte -->
+    <link rel="stylesheet" href="https://unpkg.com" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>🌴 GeoGuyane</h1>
-        <p>Testez votre connaissance du territoire guyanais !</p>
+        <p>Localisez les lieux emblématiques sur la carte de la Guyane !</p>
         <div class="scoreboard">
-            <span>Score actuel : <strong id="score">0</strong></span>
-            <span>🏆 Meilleur score : <strong id="best-score">0</strong></span>
+            <span>Question : <strong id="progress">1/7</strong></span>
+            <span>Score : <strong id="score">0</strong></span>
+            <span>🏆 Record : <strong id="best-score">0</strong></span>
         </div>
     </header>
 
@@ -38,29 +41,13 @@
         </div>
 
         <div class="map-container">
-            <!-- Carte stylisée interactive de la Guyane (Coordonnées en %) -->
-            <svg id="guyane-map" viewBox="0 0 500 550" xmlns="http://w3.org">
-                <!-- Océan Atlantique -->
-                <rect width="500" height="550" fill="#cce7f0" rx="15"/>
-                <text x="360" y="60" fill="#0077b6" font-weight="bold" font-size="14">Océan Atlantique</text>
-                
-                <!-- Territoire de la Guyane (Polygone simplifié fidèle aux frontières) -->
-                <polygon id="territory" 
-                    points="160,55 240,95 310,135 375,185 350,245 330,310 345,380 315,455 250,490 185,480 135,445 95,380 110,300 95,210 120,120" 
-                    fill="#2d6a4f" stroke="#1b4332" stroke-width="4"/>
-
-                <!-- Repères des fleuves frontaliers -->
-                <text x="55" y="250" fill="#1b4332" font-size="12" transform="rotate(-75 55,250)">Fleuve Maroni (Suriname)</text>
-                <text x="375" y="330" fill="#1b4332" font-size="12" transform="rotate(70 375,330)">Fleuve Oyapock (Brésil)</text>
-
-                <!-- Marqueurs dynamiques (Clic joueur, Vraie position, Ligne de distance) -->
-                <line id="distance-line" x1="0" y1="0" x2="0" y2="0" stroke="#ffb703" stroke-width="3" stroke-dasharray="6" class="hidden"/>
-                <circle id="player-marker" cx="0" cy="0" r="8" fill="#e63946" stroke="#fff" stroke-width="2" class="hidden"/>
-                <circle id="target-marker" cx="0" cy="0" r="8" fill="#ffb703" stroke="#fff" stroke-width="2" class="hidden"/>
-            </svg>
+            <!-- Conteneur de la carte interactive réelle -->
+            <div id="map"></div>
         </div>
     </main>
 
+    <!-- Script Leaflet -->
+    <script src="https://unpkg.com"></script>
     <script src="data.js"></script>
     <script src="app.js"></script>
 </body>

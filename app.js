@@ -3,29 +3,31 @@ let currentIndex = 0;
 let score = 0;
 let canClick = true;
 
-// Récupération du meilleur score via localStorage
+// Chargement du record via localStorage
 let bestScore = localStorage.getItem("geoguyane_best_score") || 0;
 document.getElementById("best-score").textContent = bestScore;
 
-// Éléments du DOM
-const svgMap = document.getElementById("guyane-map");
-const playerMarker = document.getElementById("player-marker");
-const targetMarker = document.getElementById("target-marker");
-const distanceLine = document.getElementById("distance-line");
-const targetNameEl = document.getElementById("target-name");
-const categoryBadgeEl = document.getElementById("category-badge");
-const feedbackBox = document.getElementById("feedback-box");
-const feedbackText = document.getElementById("feedback-text");
-const anecdoteText = document.getElementById("anecdote-text");
-const scoreEl = document.getElementById("score");
+// Initialisation de la carte centrée sur la Guyane
+const map = L.map('map', {
+    center: [3.95, -53.15], // Centre géographique de la Guyane
+    zoom: 7,
+    minZoom: 6,
+    maxZoom: 11
+});
 
-// Initialisation ou redémarrage de la partie
+// Fond de carte géographique SANS noms de villes (CartoDB Voyager No Labels)
+L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; OpenStreetMap &copy; CARTO'
+}).addTo(map);
+
+// Calque pour stocker les marqueurs et lignes du tour en cours
+let roundLayer = L.layerGroup().addTo(map);
+
 function initGame() {
-    // Mélange aléatoire des lieux
     questions = [...LIEUX_GUYANE].sort(() => Math.random() - 0.5);
     currentIndex = 0;
     score = 0;
-    scoreEl.textContent = score;
+    document.getElementById("score").textContent = score;
     
     document.getElementById("end-box").classList.add("hidden");
     document.getElementById("question-box").classList.remove("hidden");
@@ -34,62 +36,65 @@ function initGame() {
 
 function loadQuestion() {
     canClick = true;
-    const currentLieu = questions[currentIndex];
-    targetNameEl.textContent = currentLieu.nom;
-    categoryBadgeEl.textContent = currentLieu.categorie;
+    roundLayer.clearLayers(); // Nettoie les marqueurs précédents
     
-    // Masquer les marqueurs précédents
-    feedbackBox.classList.add("hidden");
-    playerMarker.classList.add("hidden");
-    targetMarker.classList.add("hidden");
-    distanceLine.classList.add("hidden");
+    const currentLieu = questions[currentIndex];
+    document.getElementById("progress").textContent = `${currentIndex + 1}/${questions.length}`;
+    document.getElementById("target-name").textContent = currentLieu.nom;
+    document.getElementById("category-badge").textContent = currentLieu.categorie;
+    document.getElementById("feedback-box").classList.add("hidden");
 }
 
-// Gestion du clic sur la carte SVG
-svgMap.addEventListener("click", (event) => {
+// Gestion du clic sur la vraie carte
+map.on('click', function(e) {
     if (!canClick) return;
     canClick = false;
 
-    // Conversion des coordonnées écran vers le repère du SVG (500x550)
-    const rect = svgMap.getBoundingClientRect();
-    const clickX = ((event.clientX - rect.left) / rect.width) * 500;
-    const clickY = ((event.clientY - rect.top) / rect.height) * 550;
-
     const currentLieu = questions[currentIndex];
+    const playerLatLng = e.latlng;
+    const targetLatLng = L.latLng(currentLieu.lat, currentLieu.lng);
 
-    // Calcul de la distance (Théorème de Pythagore) + conversion approximative en km
-    const dx = clickX - currentLieu.x;
-    const dy = clickY - currentLieu.y;
-    const pixelDistance = Math.sqrt(dx * dx + dy * dy);
-    const kmDistance = Math.round(pixelDistance * 1.15);
+    // Calcul de la vraie distance géographique (formule de Haversine intégrée à Leaflet)
+    const distanceMeters = playerLatLng.distanceTo(targetLatLng);
+    const kmDistance = Math.round(distanceMeters / 1000);
 
-    // Attribution des points (Max 1000 pts par question)
+    // Attribution des points (1000 pts max, -4 pts par km d'erreur)
     const pointsEarned = Math.max(0, Math.round(1000 - kmDistance * 4));
     score += pointsEarned;
-    scoreEl.textContent = score;
+    document.getElementById("score").textContent = score;
 
-    // Affichage visuel sur la carte
-    playerMarker.setAttribute("cx", clickX);
-    playerMarker.setAttribute("cy", clickY);
-    playerMarker.classList.remove("hidden");
+    // Marqueur rouge = clic du joueur
+    L.circleMarker(playerLatLng, {
+        color: '#ffffff',
+        fillColor: '#e63946',
+        fillOpacity: 1,
+        radius: 8,
+        weight: 2
+    }).addTo(roundLayer).bindPopup("Votre choix").openPopup();
 
-    targetMarker.setAttribute("cx", currentLieu.x);
-    targetMarker.setAttribute("cy", currentLieu.y);
-    targetMarker.classList.remove("hidden");
+    // Marqueur vert/or = bonne réponse
+    L.circleMarker(targetLatLng, {
+        color: '#ffffff',
+        fillColor: '#2d6a4f',
+        fillOpacity: 1,
+        radius: 9,
+        weight: 2
+    }).addTo(roundLayer).bindPopup(`<strong>${currentLieu.nom}</strong>`);
 
-    distanceLine.setAttribute("x1", clickX);
-    distanceLine.setAttribute("y1", clickY);
-    distanceLine.setAttribute("x2", currentLieu.x);
-    distanceLine.setAttribute("y2", currentLieu.y);
-    distanceLine.classList.remove("hidden");
+    // Ligne pointillée entre les deux points
+    L.polyline([playerLatLng, targetLatLng], {
+        color: '#e63946',
+        weight: 3,
+        dashArray: '6, 8'
+    }).addTo(roundLayer);
 
     // Affichage du résultat
-    feedbackText.innerHTML = `Vous êtes à <strong>${kmDistance} km</strong> de ${currentLieu.nom} (+${pointsEarned} pts) !`;
-    anecdoteText.textContent = currentLieu.anecdote;
-    feedbackBox.classList.remove("hidden");
+    document.getElementById("feedback-text").innerHTML = 
+        `Vous êtes à <strong>${kmDistance} km</strong> de ${currentLieu.nom} (+${pointsEarned} pts) !`;
+    document.getElementById("anecdote-text").textContent = currentLieu.anecdote;
+    document.getElementById("feedback-box").classList.remove("hidden");
 });
 
-// Bouton question suivante
 document.getElementById("next-btn").addEventListener("click", () => {
     currentIndex++;
     if (currentIndex < questions.length) {
@@ -99,13 +104,13 @@ document.getElementById("next-btn").addEventListener("click", () => {
     }
 });
 
-// Fin de partie et sauvegarde localStorage
 function endGame() {
+    roundLayer.clearLayers();
     document.getElementById("question-box").classList.add("hidden");
-    feedbackBox.classList.add("hidden");
+    document.getElementById("feedback-box").classList.add("hidden");
     document.getElementById("end-box").classList.remove("hidden");
 
-    let message = `Votre score final est de ${score} / ${questions.length * 1000} points.`;
+    let message = `Score final : ${score} / ${questions.length * 1000} points.`;
     if (score > bestScore) {
         bestScore = score;
         localStorage.setItem("geoguyane_best_score", bestScore);
@@ -117,5 +122,5 @@ function endGame() {
 
 document.getElementById("restart-btn").addEventListener("click", initGame);
 
-// Lancement au chargement
+// Démarrage du jeu
 initGame();
