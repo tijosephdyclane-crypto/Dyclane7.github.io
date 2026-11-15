@@ -1,0 +1,37 @@
+[
+    {
+        "nom": "Place des Palmistes - Cayenne",
+        "lat": 4.9392,
+        "lng": -52.3338,
+        "image": "images/palmistes.jpg",
+        "info": "Place emblématique du centre-ville de Cayenne, plantée de palmiers royaux au XIXe siècle."
+    },
+    {
+        "nom": "Centre Spatial Guyanais - Kourou",
+        "lat": 5.2361,
+        "lng": -52.7686,
+        "image": "images/csg.jpg",
+        "info": "Base de lancement spatiale française et européenne d'où décollent les fusées Ariane et Vega."
+    },
+    {
+        "nom": "Camp de la Transportation - Saint-Laurent-du-Maroni",
+        "lat": 5.5036,
+        "lng": -54.0289,
+        "image": "images/camp.jpg",
+        "info": "Ancien centre pénitentiaire historique qui accueillait les bagnards arrivant de métropole."
+    },
+    {
+        "nom": "Île Royale - Îles du Salut",
+        "lat": 5.2875,
+        "lng": -52.5886,
+        "image": "images/ile_royale.jpg",
+        "info": "La plus grande des trois îles de l'archipel situé au large de Kourou."
+    },
+    {
+        "nom": "Marais de Kaw - Roura",
+        "lat": 4.4861,
+        "lng": -52.0378,
+        "image": "images/kaw.jpg",
+        "info": "Plus vaste zone humide de France, célèbre pour sa biodiversité et ses caïmans noirs."
+    }
+]

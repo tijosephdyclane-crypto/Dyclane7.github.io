@@ -2,11 +2,44 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>GuyaneGuessr - Explore la Guyane</title>
+    <!-- API Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
- Bonjour, bienvenue sur mon site web !
+
+    <header>
+        <h1>GuyaneGuessr</h1>
+        <div class="stats">
+            <span>Manche : <strong id="round">1</strong>/5</span>
+            <span>Score : <strong id="score">0</strong></span>
+            <span>Record : <strong id="high-score">0</strong></span>
+        </div>
+    </header>
+
+    <main class="game-container">
+        <!-- Zone d'affichage de l'image à deviner -->
+        <section class="image-panel">
+            <img id="location-image" src="" alt="Lieu mystère en Guyane">
+            <div id="result-box" class="hidden">
+                <h2 id="location-name">Nom du lieu</h2>
+                <p id="location-info">Anecdote...</p>
+                <p class="distance-text">Tu étais à <strong id="distance-result">0</strong> km (+<strong id="points-earned">0</strong> pts)</p>
+                <button id="next-btn">Manche suivante ➔</button>
+            </div>
+        </section>
+
+        <!-- Zone de la carte interactive -->
+        <section class="map-panel">
+            <div id="map"></div>
+            <button id="guess-btn" disabled>Clique sur la carte pour deviner</button>
+        </section>
+    </main>
+
+    <!-- API Leaflet JS -->
+    <script src="https://unpkg.com"></script>
+    <script src="script.js"></script>
 </body>
 </html>
