@@ -4,15 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GeoGuyane - Le Défi Géographique</title>
-    <link rel="stylesheet" href="leaflet.css" />
+    <link rel="stylesheet" href="leaflet.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>🌴 GeoGuyane</h1>
-        <p>Localisez les lieux emblématiques sur la carte de la Guyane !</p>
+        <p>Testez votre connaissance de la Guyane !</p>
         <div class="scoreboard">
-            <span>Question : <strong id="progress">1/7</strong></span>
+            <span>Question : <strong id="progress">—</strong></span>
             <span>Score : <strong id="score">0</strong></span>
             <span>🏆 Record : <strong id="best-score">0</strong></span>
         </div>
@@ -20,23 +20,42 @@
 
     <main>
         <div class="game-panel">
-            <div id="question-box">
+            <div id="mode-box">
+                <h2>Choisissez un mode</h2>
+                <p>Que voulez-vous localiser sur la carte ?</p>
+                <div class="mode-buttons">
+                    <button data-mode="communes">Communes</button>
+                    <button data-mode="emblematiques">Lieux emblématiques</button>
+                </div>
+            </div>
+
+            <div id="question-box" class="hidden">
+                <button id="change-mode-btn" class="secondary">Changer de mode</button>
                 <span class="badge" id="category-badge">Commune</span>
                 <h2 id="target-name">Chargement...</h2>
                 <p id="target-hint">Cliquez sur la carte là où vous pensez que ce lieu se situe.</p>
+                <form id="commune-guess-box" class="hidden">
+                    <label for="commune-guess">Dans quelle commune se trouve ce lieu ?</label>
+                    <input id="commune-guess" name="commune" list="commune-options" autocomplete="off" required>
+                    <datalist id="commune-options"></datalist>
+                    <button type="submit">Valider ma réponse</button>
+                    <p id="guess-attempts"></p>
+                    <p id="guess-feedback" aria-live="polite"></p>
+                </form>
             </div>
 
             <div id="feedback-box" class="hidden">
                 <p id="feedback-text"></p>
                 <img id="lieu-image" src="" alt="Photo du lieu" class="hidden">
                 <p id="anecdote-text" class="anecdote"></p>
-                <button id="next-btn">Lieu suivant ➔</button>
+                <button id="next-btn">Question suivante ➔</button>
             </div>
 
             <div id="end-box" class="hidden">
                 <h2>Partie terminée ! 🎉</h2>
                 <p id="final-summary"></p>
                 <button id="restart-btn">Rejouer</button>
+                <button id="end-change-mode-btn" class="secondary">Changer de mode</button>
             </div>
         </div>
 
@@ -47,6 +66,7 @@
 
     <script src="leaflet.js"></script>
     <script src="data.js"></script>
+    <script src="guyane.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

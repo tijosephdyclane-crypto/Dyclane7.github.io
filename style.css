@@ -55,6 +55,45 @@ main {
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
+#mode-box h2 {
+    margin-bottom: 10px;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+#commune-guess-box {
+    margin-top: 16px;
+}
+
+#commune-guess-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+#commune-guess {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #b7c9bd;
+    border-radius: 8px;
+    color: #1b4332;
+    font-size: 1rem;
+}
+
+#guess-attempts,
+#guess-feedback {
+    margin-top: 8px;
+}
+
+#guess-feedback {
+    min-height: 1.4em;
+    font-weight: 600;
+}
+
 .badge {
     background: #40916c;
     color: white;
@@ -89,6 +128,17 @@ button {
     font-size: 1rem;
     cursor: pointer;
     transition: transform 0.2s, background 0.2s;
+}
+
+.secondary {
+    background: #e9f2ec;
+    color: #1b4332;
+    font-size: 0.9rem;
+    padding: 8px 14px;
+}
+
+.secondary:hover {
+    background: #d8f3dc;
 }
 
 button:hover {
