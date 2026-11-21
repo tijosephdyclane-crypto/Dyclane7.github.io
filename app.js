@@ -25,10 +25,14 @@ function getBestScore(mode) {
 function chooseMode(mode) {
     activeMode = mode;
     bestScore = getBestScore(mode);
+    document.querySelector("main").classList.remove("pre-game");
     document.getElementById("best-score").textContent = bestScore;
+    document.getElementById("scoreboard").classList.remove("hidden");
     document.getElementById("mode-box").classList.add("hidden");
     document.getElementById("end-box").classList.add("hidden");
     document.getElementById("question-box").classList.remove("hidden");
+    document.getElementById("map-container").classList.remove("hidden");
+    map.invalidateSize();
     initGame();
 }
 
@@ -61,10 +65,53 @@ L.geoJSON(GUYANE_BOUNDARY, {
     }
 }).addTo(map);
 
+let communeBoundariesLayer = null;
+let communeBoundariesVisible = false;
+
+function showCommuneBoundaries() {
+    communeBoundariesVisible = true;
+    if (communeBoundariesLayer && !map.hasLayer(communeBoundariesLayer)) {
+        communeBoundariesLayer.addTo(map);
+    }
+}
+
+function hideCommuneBoundaries() {
+    communeBoundariesVisible = false;
+    if (communeBoundariesLayer && map.hasLayer(communeBoundariesLayer)) {
+        map.removeLayer(communeBoundariesLayer);
+    }
+}
+
+fetch("guyane.geojson")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(communeBoundaries => {
+        communeBoundariesLayer = L.geoJSON(communeBoundaries, {
+            style: {
+                color: '#ffd166',
+                weight: 1.5,
+                opacity: 0.95,
+                fillOpacity: 0
+            },
+            interactive: false
+        });
+        if (communeBoundariesVisible) {
+            communeBoundariesLayer.addTo(map);
+        }
+    })
+    .catch(error => {
+        console.error("Impossible de charger les limites des communes de Guyane.", error);
+    });
+
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
 
 function initGame() {
+    hideCommuneBoundaries();
     questions = [...modeQuestions[activeMode]].sort(() => Math.random() - 0.5);
     currentIndex = 0;
     score = 0;
@@ -89,6 +136,7 @@ function loadQuestion() {
         ? "Trouvez la commune où se trouve ce lieu."
         : "Cliquez sur la carte là où vous pensez que ce lieu se situe.";
     document.getElementById("feedback-box").classList.add("hidden");
+    hideLieuImage();
     const guessBox = document.getElementById("commune-guess-box");
     guessBox.classList.toggle("hidden", activeMode !== "emblematiques");
     document.getElementById("commune-guess").value = "";
@@ -100,6 +148,7 @@ function loadQuestion() {
 map.on('click', function(e) {
     if (!canClick || activeMode !== "communes") return;
     canClick = false;
+    showCommuneBoundaries();
 
     const currentLieu = questions[currentIndex];
     const playerLatLng = e.latlng;
@@ -139,17 +188,7 @@ map.on('click', function(e) {
         dashArray: '6, 8'
     }).addTo(roundLayer);
 
-    // Affichage de l'image du lieu (si disponible)
-    const imgElement = document.getElementById("lieu-image");
-    if (imgElement) {
-        if (currentLieu.image) {
-            imgElement.src = currentLieu.image;
-            imgElement.alt = `Photo de ${currentLieu.nom}`;
-            imgElement.classList.remove("hidden");
-        } else {
-            imgElement.classList.add("hidden");
-        }
-    }
+    showLieuImage(currentLieu);
 
     // Affichage du résultat
     document.getElementById("feedback-text").innerHTML = 
@@ -162,16 +201,27 @@ function normalizeCommuneName(name) {
     return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
-function showLieuDetails(lieu) {
+function hideLieuImage() {
     const imgElement = document.getElementById("lieu-image");
-    if (lieu.image) {
-        imgElement.src = lieu.image;
-        imgElement.alt = `Photo de ${lieu.nom}`;
-        imgElement.classList.remove("hidden");
-    } else {
-        imgElement.removeAttribute("src");
-        imgElement.classList.add("hidden");
+    imgElement.removeAttribute("src");
+    imgElement.alt = "";
+    imgElement.classList.add("hidden");
+}
+
+function showLieuImage(lieu) {
+    const imgElement = document.getElementById("lieu-image");
+    if (!lieu.image) {
+        hideLieuImage();
+        return;
     }
+
+    imgElement.src = lieu.image;
+    imgElement.alt = `Photo de ${lieu.nom}`;
+    imgElement.classList.remove("hidden");
+}
+
+function showLieuDetails(lieu) {
+    showLieuImage(lieu);
     document.getElementById("anecdote-text").textContent = lieu.anecdote;
     document.getElementById("feedback-box").classList.remove("hidden");
 }
@@ -203,6 +253,8 @@ document.getElementById("commune-guess-box").addEventListener("submit", event =>
     }
 
     const currentLieu = questions[currentIndex];
+    showLieuImage(currentLieu);
+    showCommuneBoundaries();
     attemptsUsed++;
     const correct = normalizeCommuneName(guessedCommune.nom) === normalizeCommuneName(currentLieu.commune);
     if (correct) {
@@ -273,18 +325,33 @@ function endGame() {
 }
 
 document.getElementById("restart-btn").addEventListener("click", initGame);
+document.getElementById("start-btn").addEventListener("click", () => {
+    document.getElementById("start-box").classList.add("hidden");
+    document.getElementById("mode-box").classList.remove("hidden");
+});
+document.getElementById("back-btn").addEventListener("click", () => {
+    document.getElementById("mode-box").classList.add("hidden");
+    document.getElementById("start-box").classList.remove("hidden");
+});
 document.querySelectorAll("[data-mode]").forEach(button => {
     button.addEventListener("click", () => chooseMode(button.dataset.mode));
 });
 document.getElementById("change-mode-btn").addEventListener("click", () => {
     canClick = false;
     roundLayer.clearLayers();
+    hideCommuneBoundaries();
+    document.querySelector("main").classList.add("pre-game");
     document.getElementById("question-box").classList.add("hidden");
     document.getElementById("feedback-box").classList.add("hidden");
+    document.getElementById("scoreboard").classList.add("hidden");
+    document.getElementById("map-container").classList.add("hidden");
     document.getElementById("mode-box").classList.remove("hidden");
 });
 document.getElementById("end-change-mode-btn").addEventListener("click", () => {
     document.getElementById("end-box").classList.add("hidden");
+    document.querySelector("main").classList.add("pre-game");
+    document.getElementById("scoreboard").classList.add("hidden");
+    document.getElementById("map-container").classList.add("hidden");
     document.getElementById("mode-box").classList.remove("hidden");
 });
 

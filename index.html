@@ -11,16 +11,21 @@
     <header>
         <h1>🌴 GeoGuyane</h1>
         <p>Testez votre connaissance de la Guyane !</p>
-        <div class="scoreboard">
+        <div id="scoreboard" class="scoreboard hidden">
             <span>Question : <strong id="progress">—</strong></span>
             <span>Score : <strong id="score">0</strong></span>
             <span>🏆 Record : <strong id="best-score">0</strong></span>
         </div>
     </header>
 
-    <main>
+    <main class="pre-game">
         <div class="game-panel">
-            <div id="mode-box">
+            <div id="start-box">
+                <button id="start-btn">Commencer</button>
+            </div>
+
+            <div id="mode-box" class="hidden">
+                <button id="back-btn" class="secondary">← Retour</button>
                 <h2>Choisissez un mode</h2>
                 <p>Que voulez-vous localiser sur la carte ?</p>
                 <div class="mode-buttons">
@@ -30,7 +35,7 @@
             </div>
 
             <div id="question-box" class="hidden">
-                <button id="change-mode-btn" class="secondary">Changer de mode</button>
+                <button id="change-mode-btn" class="secondary">← Retour</button>
                 <span class="badge" id="category-badge">Commune</span>
                 <h2 id="target-name">Chargement...</h2>
                 <p id="target-hint">Cliquez sur la carte là où vous pensez que ce lieu se situe.</p>
@@ -42,11 +47,11 @@
                     <p id="guess-attempts"></p>
                     <p id="guess-feedback" aria-live="polite"></p>
                 </form>
+                <img id="lieu-image" src="" alt="" class="hidden">
             </div>
 
             <div id="feedback-box" class="hidden">
                 <p id="feedback-text"></p>
-                <img id="lieu-image" src="" alt="Photo du lieu" class="hidden">
                 <p id="anecdote-text" class="anecdote"></p>
                 <button id="next-btn">Question suivante ➔</button>
             </div>
@@ -59,7 +64,7 @@
             </div>
         </div>
 
-        <div class="map-container">
+        <div id="map-container" class="map-container hidden">
             <div id="map"></div>
         </div>
     </main>
