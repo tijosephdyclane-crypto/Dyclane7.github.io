@@ -15,10 +15,12 @@ const map = L.map('map', {
     maxZoom: 11
 });
 
-// Fond de carte géographique SANS noms de villes (URL complète corrigée)
+// ✅ URL corrigée (fond de carte sans noms de villes)
 L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; OpenStreetMap &copy; CARTO'
+    attribution: '&copy; OpenStreetMap &copy; CARTO',
+    subdomains: 'abcd'
 }).addTo(map);
+
 
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
