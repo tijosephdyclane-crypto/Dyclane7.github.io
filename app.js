@@ -15,12 +15,11 @@ const map = L.map('map', {
     maxZoom: 11
 });
 
-// ✅ URL corrigée (fond de carte sans noms de villes)
+// Fond de carte sans noms de villes
 L.tileLayer('https://{s}://{z}/{x}/{y}{r}.png', {
     attribution: '&copy; OpenStreetMap &copy; CARTO',
     subdomains: 'abcd'
 }).addTo(map);
-
 
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
@@ -89,6 +88,18 @@ map.on('click', function(e) {
         weight: 3,
         dashArray: '6, 8'
     }).addTo(roundLayer);
+
+    // Affichage de l'image du lieu (si disponible)
+    const imgElement = document.getElementById("lieu-image");
+    if (imgElement) {
+        if (currentLieu.image) {
+            imgElement.src = currentLieu.image;
+            imgElement.alt = `Photo de ${currentLieu.nom}`;
+            imgElement.classList.remove("hidden");
+        } else {
+            imgElement.classList.add("hidden");
+        }
+    }
 
     // Affichage du résultat
     document.getElementById("feedback-text").innerHTML = 
