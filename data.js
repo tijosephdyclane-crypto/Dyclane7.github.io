@@ -12,6 +12,7 @@ const COMMUNES_GUYANE = [
         categorie: "Commune",
         lat: 5.1579834,
         lng: -52.6424204,
+        image: "images/csg.jpg",
         anecdote: "Kourou accueille le Centre spatial guyanais, base de lancement européenne."
     },
     {
@@ -52,6 +53,111 @@ const COMMUNES_GUYANE = [
         lat: 4.9051217,
         lng: -52.2772372,
         anecdote: "Voisine de Cayenne, cette commune côtière est connue pour ses plages et le sentier du Rorota."
+    },
+    {
+        nom: "Apatou",
+        categorie: "Commune",
+        lat: 5.1551,
+        lng: -54.3411,
+        anecdote: "Apatou est une commune de l'ouest guyanais située sur le fleuve Maroni."
+    },
+    {
+        nom: "Awala-Yalimapo",
+        categorie: "Commune",
+        lat: 5.7292,
+        lng: -53.9362,
+        anecdote: "Awala-Yalimapo est connue pour la plage des Hattes, un important site de ponte des tortues marines."
+    },
+    {
+        nom: "Camopi",
+        categorie: "Commune",
+        lat: 3.1654,
+        lng: -52.3260,
+        anecdote: "Camopi se trouve sur l'Oyapock, à la frontière entre la Guyane et le Brésil."
+    },
+    {
+        nom: "Grand-Santi",
+        categorie: "Commune",
+        lat: 4.2504,
+        lng: -54.3812,
+        anecdote: "Grand-Santi est une commune de l'ouest guyanais située le long du Maroni."
+    },
+    {
+        nom: "Iracoubo",
+        categorie: "Commune",
+        lat: 5.4806,
+        lng: -53.2066,
+        anecdote: "L'église Saint-Joseph d'Iracoubo est célèbre pour ses peintures intérieures."
+    },
+    {
+        nom: "Macouria",
+        categorie: "Commune",
+        lat: 5.0073,
+        lng: -52.4803,
+        anecdote: "Macouria, dont le bourg principal est Tonate, se situe entre Cayenne et Kourou."
+    },
+    {
+        nom: "Mana",
+        categorie: "Commune",
+        lat: 5.6697,
+        lng: -53.7770,
+        anecdote: "Mana est une commune de l'ouest guyanais fondée au XIXe siècle par la mère Javouhey."
+    },
+    {
+        nom: "Matoury",
+        categorie: "Commune",
+        lat: 4.8483,
+        lng: -52.3297,
+        anecdote: "L'aéroport international Félix-Éboué se trouve sur le territoire de Matoury."
+    },
+    {
+        nom: "Montsinéry-Tonnegrande",
+        categorie: "Commune",
+        lat: 4.8579,
+        lng: -52.4895,
+        anecdote: "Montsinéry-Tonnegrande est une commune rurale située à proximité de l'agglomération de Cayenne."
+    },
+    {
+        nom: "Ouanary",
+        categorie: "Commune",
+        lat: 4.2257,
+        lng: -51.6699,
+        anecdote: "Ouanary est une commune isolée de l'est guyanais, près de l'embouchure de l'Oyapock."
+    },
+    {
+        nom: "Papaïchton",
+        categorie: "Commune",
+        lat: 3.8094,
+        lng: -53.9947,
+        anecdote: "Papaïchton est une commune de l'intérieur située sur le fleuve Maroni."
+    },
+    {
+        nom: "Régina",
+        categorie: "Commune",
+        lat: 4.3149,
+        lng: -52.1315,
+        anecdote: "Régina est une vaste commune de l'est guyanais traversée par l'Approuague."
+    },
+    {
+        nom: "Roura",
+        categorie: "Commune",
+        lat: 4.7264,
+        lng: -52.3278,
+        anecdote: "Roura est notamment connue pour les marais de Kaw, un site naturel remarquable."
+    },
+    {
+        nom: "Saint-Élie",
+        categorie: "Commune",
+        lat: 4.8165,
+        lng: -53.2762,
+        anecdote: "Saint-Élie est une commune isolée de l'intérieur de la Guyane, accessible notamment par le lac de Petit-Saut."
+    },
+    {
+        nom: "Sinnamary",
+        categorie: "Commune",
+        lat: 5.3784,
+        lng: -52.9546,
+        anecdote: "Sinnamary est une commune côtière traversée par le fleuve du même nom."
     }
 ];
 
