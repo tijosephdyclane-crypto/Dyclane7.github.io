@@ -65,23 +65,6 @@ L.geoJSON(GUYANE_BOUNDARY, {
     }
 }).addTo(map);
 
-let communeBoundariesLayer = null;
-let communeBoundariesVisible = false;
-
-function showCommuneBoundaries() {
-    communeBoundariesVisible = true;
-    if (communeBoundariesLayer && !map.hasLayer(communeBoundariesLayer)) {
-        communeBoundariesLayer.addTo(map);
-    }
-}
-
-function hideCommuneBoundaries() {
-    communeBoundariesVisible = false;
-    if (communeBoundariesLayer && map.hasLayer(communeBoundariesLayer)) {
-        map.removeLayer(communeBoundariesLayer);
-    }
-}
-
 fetch("guyane.geojson")
     .then(response => {
         if (!response.ok) {
@@ -90,7 +73,7 @@ fetch("guyane.geojson")
         return response.json();
     })
     .then(communeBoundaries => {
-        communeBoundariesLayer = L.geoJSON(communeBoundaries, {
+        L.geoJSON(communeBoundaries, {
             style: {
                 color: '#ffd166',
                 weight: 1.5,
@@ -98,10 +81,7 @@ fetch("guyane.geojson")
                 fillOpacity: 0
             },
             interactive: false
-        });
-        if (communeBoundariesVisible) {
-            communeBoundariesLayer.addTo(map);
-        }
+        }).addTo(map);
     })
     .catch(error => {
         console.error("Impossible de charger les limites des communes de Guyane.", error);
@@ -111,7 +91,6 @@ fetch("guyane.geojson")
 let roundLayer = L.layerGroup().addTo(map);
 
 function initGame() {
-    hideCommuneBoundaries();
     questions = [...modeQuestions[activeMode]].sort(() => Math.random() - 0.5);
     currentIndex = 0;
     score = 0;
@@ -133,8 +112,8 @@ function loadQuestion() {
     document.getElementById("target-name").textContent = currentLieu.nom;
     document.getElementById("category-badge").textContent = currentLieu.categorie;
     document.getElementById("target-hint").textContent = activeMode === "emblematiques"
-        ? "Trouvez la commune où se trouve ce lieu."
-        : "Cliquez sur la carte là où vous pensez que ce lieu se situe.";
+        ? "Trouvez la commune où se trouve ce lieu. Quitter la page fait échouer la question."
+        : "Cliquez sur la carte là où vous pensez que ce lieu se situe. Quitter la page fait échouer la question.";
     document.getElementById("feedback-box").classList.add("hidden");
     hideLieuImage();
     const guessBox = document.getElementById("commune-guess-box");
@@ -148,7 +127,6 @@ function loadQuestion() {
 map.on('click', function(e) {
     if (!canClick || activeMode !== "communes") return;
     canClick = false;
-    showCommuneBoundaries();
 
     const currentLieu = questions[currentIndex];
     const playerLatLng = e.latlng;
@@ -237,6 +215,27 @@ function revealLandmarkLocation(lieu) {
     }).addTo(roundLayer);
 }
 
+function failCurrentQuestion() {
+    if (!activeMode || !canClick) return;
+
+    canClick = false;
+    const currentLieu = questions[currentIndex];
+    revealLandmarkLocation(currentLieu);
+    document.getElementById("feedback-text").textContent = activeMode === "communes"
+        ? `Question échouée : vous avez quitté la page. ${currentLieu.nom} est indiqué sur la carte.`
+        : `Question échouée : vous avez quitté la page. ${currentLieu.nom} se trouve à ${currentLieu.commune}.`;
+    if (activeMode === "emblematiques") {
+        document.getElementById("commune-guess-box").classList.add("hidden");
+    }
+    showLieuDetails(currentLieu);
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        failCurrentQuestion();
+    }
+});
+
 document.getElementById("commune-guess-box").addEventListener("submit", event => {
     event.preventDefault();
     if (activeMode !== "emblematiques" || !canClick) return;
@@ -254,7 +253,6 @@ document.getElementById("commune-guess-box").addEventListener("submit", event =>
 
     const currentLieu = questions[currentIndex];
     showLieuImage(currentLieu);
-    showCommuneBoundaries();
     attemptsUsed++;
     const correct = normalizeCommuneName(guessedCommune.nom) === normalizeCommuneName(currentLieu.commune);
     if (correct) {
@@ -339,7 +337,6 @@ document.querySelectorAll("[data-mode]").forEach(button => {
 document.getElementById("change-mode-btn").addEventListener("click", () => {
     canClick = false;
     roundLayer.clearLayers();
-    hideCommuneBoundaries();
     document.querySelector("main").classList.add("pre-game");
     document.getElementById("question-box").classList.add("hidden");
     document.getElementById("feedback-box").classList.add("hidden");
