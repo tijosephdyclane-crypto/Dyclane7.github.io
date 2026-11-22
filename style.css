@@ -57,6 +57,11 @@ main.pre-game {
     max-width: 560px;
 }
 
+/* Affichage compacte pour le mode sans carte */
+main.emblematic-mode {
+    max-width: 560px;
+}
+
 /* Styles pour le panneau de jeu */
 main.pre-game .game-panel {
     text-align: center;

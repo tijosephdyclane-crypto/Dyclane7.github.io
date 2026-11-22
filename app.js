@@ -30,14 +30,19 @@ function getBestScore(mode) {
 function chooseMode(mode) {
     activeMode = mode;
     bestScore = getBestScore(mode);
-    document.querySelector("main").classList.remove("pre-game");
+    const mainElement = document.querySelector("main");
+    mainElement.classList.remove("pre-game");
+    mainElement.classList.toggle("emblematic-mode", mode === "emblematiques");
     document.getElementById("best-score").textContent = bestScore;
     document.getElementById("scoreboard").classList.remove("hidden");
     document.getElementById("mode-box").classList.add("hidden");
     document.getElementById("end-box").classList.add("hidden");
     document.getElementById("question-box").classList.remove("hidden");
-    document.getElementById("map-container").classList.remove("hidden");
-    map.invalidateSize();
+    const mapContainer = document.getElementById("map-container");
+    mapContainer.classList.toggle("hidden", mode === "emblematiques");
+    if (mode === "communes") {
+        map.invalidateSize();
+    }
     initGame();
 }
 
