@@ -8,6 +8,7 @@ let attemptsUsed = 0;
 
 const MAX_COMMUNE_GUESSES = 3;
 const NEAR_COMMUNE_DISTANCE_METERS = 50000;
+const COMMUNE_QUESTION_COUNT = 10;
 
 const modeQuestions = {
     communes: COMMUNES_GUYANE,
@@ -91,7 +92,10 @@ fetch("guyane.geojson")
 let roundLayer = L.layerGroup().addTo(map);
 
 function initGame() {
-    questions = [...modeQuestions[activeMode]].sort(() => Math.random() - 0.5);
+    const shuffledQuestions = [...modeQuestions[activeMode]].sort(() => Math.random() - 0.5);
+    questions = activeMode === "communes"
+        ? shuffledQuestions.slice(0, COMMUNE_QUESTION_COUNT)
+        : shuffledQuestions;
     currentIndex = 0;
     score = 0;
     document.getElementById("score").textContent = score;
