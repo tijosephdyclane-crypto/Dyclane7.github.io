@@ -113,6 +113,9 @@ function loadQuestion() {
     
     const currentLieu = questions[currentIndex];
     document.getElementById("progress").textContent = `${currentIndex + 1}/${questions.length}`;
+    document.getElementById("next-btn").textContent = activeMode === "communes"
+        ? "Commune suivante ➔"
+        : "Question suivante ➔";
     document.getElementById("target-name").textContent = currentLieu.nom;
     document.getElementById("category-badge").textContent = currentLieu.categorie;
     document.getElementById("target-hint").textContent = activeMode === "emblematiques"
