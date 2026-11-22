@@ -26,8 +26,8 @@ Il contiendra :
 
 ```text
 - L'ajout de nouveaux points d'intérêt et informations détaillées dans les pop-ups
-- Un système de recherche ou de filtrage par catégorie / commune
 - L'amélioration du design et de l'ergonomie de l'interface
 - L'optimisation du chargement des données géographiques
+- l'ajout des images manquantes au communes et lieux concernées
 ```
 
