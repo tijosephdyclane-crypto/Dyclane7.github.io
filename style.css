@@ -1,3 +1,4 @@
+/* Styles global */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,6 +6,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Styles pour le corps de la page */
 body {
     background-color: #f4f7f5;
     color: #1b4332;
@@ -15,16 +17,19 @@ body {
     padding: 20px;
 }
 
+/* Styles pour l'en-tête */
 header {
     text-align: center;
     margin-bottom: 20px;
 }
 
+/* Styles pour le titre principal */
 header h1 {
     font-size: 2.2rem;
     color: #1b4332;
 }
 
+/* Styles pour le sous-titre */
 .scoreboard {
     margin-top: 10px;
     display: flex;
@@ -36,6 +41,7 @@ header h1 {
     font-size: 1.1rem;
 }
 
+/* Styles pour le contenu principal */
 main {
     display: flex;
     flex-wrap: wrap;
@@ -46,18 +52,22 @@ main {
     align-items: flex-start;
 }
 
+/* Styles pour la section pré-jeu */
 main.pre-game {
     max-width: 560px;
 }
 
+/* Styles pour le panneau de jeu */
 main.pre-game .game-panel {
     text-align: center;
 }
 
+/* Styles pour les boutons de mode */
 main.pre-game .mode-buttons {
     justify-content: center;
 }
 
+/* Styles pour le panneau de jeu */
 .game-panel {
     flex: 1;
     min-width: 300px;
@@ -67,26 +77,31 @@ main.pre-game .mode-buttons {
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
+/* Styles pour le titre du panneau de jeu */
 #mode-box h2 {
     margin-bottom: 10px;
 }
 
+/* Styles pour les boutons de mode */
 .mode-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
+/* Styles pour le panneau de question */
 #commune-guess-box {
     margin-top: 16px;
 }
 
+/* Styles pour le label et l'input de la question */
 #commune-guess-box label {
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
 }
 
+/* Styles pour l'entrée de la question */
 #commune-guess {
     width: 100%;
     padding: 11px 12px;
@@ -96,16 +111,19 @@ main.pre-game .mode-buttons {
     font-size: 1rem;
 }
 
+/* Styles pour les messages de feedback et les tentatives */
 #guess-attempts,
 #guess-feedback {
     margin-top: 8px;
 }
 
+/* Styles pour le feedback de la question */
 #guess-feedback {
     min-height: 1.4em;
     font-weight: 600;
 }
 
+/* Styles pour le badge de score */
 .badge {
     background: #40916c;
     color: white;
@@ -116,11 +134,13 @@ main.pre-game .mode-buttons {
     font-weight: bold;
 }
 
+/* Styles pour le nom du lieu cible */
 #target-name {
     font-size: 1.8rem;
     margin: 15px 0 10px;
 }
 
+/* Styles pour l'anecdote du lieu */
 .anecdote {
     margin-top: 10px;
     padding: 12px;
@@ -130,6 +150,7 @@ main.pre-game .mode-buttons {
     font-size: 0.95rem;
 }
 
+/* Styles pour les boutons */
 button {
     margin-top: 15px;
     padding: 12px 24px;
@@ -142,6 +163,7 @@ button {
     transition: transform 0.2s, background 0.2s;
 }
 
+/* Styles pour les boutons secondaires */
 .secondary {
     background: #e9f2ec;
     color: #1b4332;
@@ -149,16 +171,18 @@ button {
     padding: 8px 14px;
 }
 
+/* Styles pour les boutons secondaires au survol */
 .secondary:hover {
     background: #d8f3dc;
 }
 
+/* Styles pour les boutons au survol */
 button:hover {
     background: #1b4332;
     transform: translateY(-2px);
 }
 
-.map-container {
+.map-container {/* Styles pour le conteneur de la carte */
     flex: 1.3;
     min-width: 340px;
     height: 520px;
@@ -168,6 +192,7 @@ button:hover {
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
+/* Styles pour la carte */
 #map {
     width: 100%;
     height: 100%;
@@ -176,27 +201,30 @@ button:hover {
     z-index: 1;
 }
 
-.hidden {
+.hidden { /* Classe pour cacher les éléments */
     display: none;
 }
 
 
-.hidden {
+.hidden { /* Classe pour cacher les éléments */
     display: none;
 }
 
+/* Animation pour le cercle de localisation du lieu */
 @keyframes pop {
     0% { transform: scale(0); }
     80% { transform: scale(1.3); }
     100% { transform: scale(1); }
 }
 
+/* Animation pour le cercle de localisation du lieu */
 circle {
     transform-box: fill-box;
     transform-origin: center;
     animation: pop 0.3s ease-out;
 }
 
+/* Styles spécifiques pour l'image du lieu */
 #lieu-image {
     width: 100%;
     max-height: 200px;

@@ -1,3 +1,4 @@
+// Variables globales pour le jeu
 let questions = [];
 let currentIndex = 0;
 let score = 0;
@@ -6,15 +7,18 @@ let activeMode = null;
 let bestScore = 0;
 let attemptsUsed = 0;
 
+// Constantes pour le mode "communes"
 const MAX_COMMUNE_GUESSES = 3;
 const NEAR_COMMUNE_DISTANCE_METERS = 50000;
 const COMMUNE_QUESTION_COUNT = 10;
 
+// Constantes pour les données de jeu
 const modeQuestions = {
     communes: COMMUNES_GUYANE,
     emblematiques: LIEUX_EMBLEMATIQUES_GUYANE
 };
 
+// Fonction pour récupérer le meilleur score depuis le stockage local
 function getBestScore(mode) {
     const savedScore = localStorage.getItem(`geoguyane_best_score_${mode}`);
     if (savedScore !== null) return Number(savedScore);
@@ -22,7 +26,7 @@ function getBestScore(mode) {
         ? Number(localStorage.getItem("geoguyane_best_score") || 0)
         : 0;
 }
-
+// Fonction pour choisir le mode de jeu et initialiser la partie
 function chooseMode(mode) {
     activeMode = mode;
     bestScore = getBestScore(mode);
@@ -64,8 +68,9 @@ L.geoJSON(GUYANE_BOUNDARY, {
         fillColor: '#ffffff',
         fillOpacity: 0.05
     }
-}).addTo(map);
+}).addTo(map);// Contour des communes de Guyane
 
+// On utilise fetch pour charger le fichier GeoJSON des limites des communes de Guyane
 fetch("guyane.geojson")
     .then(response => {
         if (!response.ok) {
@@ -91,6 +96,7 @@ fetch("guyane.geojson")
 // Calque pour stocker les marqueurs et lignes du tour en cours
 let roundLayer = L.layerGroup().addTo(map);
 
+// Fonction pour initialiser le jeu en mélangeant les questions et en réinitialisant les variables
 function initGame() {
     const shuffledQuestions = [...modeQuestions[activeMode]].sort(() => Math.random() - 0.5);
     questions = activeMode === "communes"
@@ -106,11 +112,13 @@ function initGame() {
     loadQuestion();
 }
 
+// Fonction pour charger la question actuelle et mettre à jour l'interface utilisateur
 function loadQuestion() {
     canClick = true;
     attemptsUsed = 0;
     roundLayer.clearLayers();
     
+    // Mettre à jour l'affichage de la question et des indices
     const currentLieu = questions[currentIndex];
     document.getElementById("progress").textContent = `${currentIndex + 1}/${questions.length}`;
     document.getElementById("next-btn").textContent = activeMode === "communes"
@@ -123,6 +131,8 @@ function loadQuestion() {
         : "Cliquez sur la carte là où vous pensez que ce lieu se situe. Quitter la page fait échouer la question.";
     document.getElementById("feedback-box").classList.add("hidden");
     hideLieuImage();
+
+    // Gestion de l'affichage du formulaire de saisie pour le mode "emblematiques"
     const guessBox = document.getElementById("commune-guess-box");
     guessBox.classList.toggle("hidden", activeMode !== "emblematiques");
     document.getElementById("commune-guess").value = "";
@@ -135,6 +145,7 @@ map.on('click', function(e) {
     if (!canClick || activeMode !== "communes") return;
     canClick = false;
 
+    // Récupération des coordonnées du clic et du lieu cible
     const currentLieu = questions[currentIndex];
     const playerLatLng = e.latlng;
     const targetLatLng = L.latLng(currentLieu.lat, currentLieu.lng);
@@ -182,10 +193,12 @@ map.on('click', function(e) {
     document.getElementById("feedback-box").classList.remove("hidden");
 });
 
+// Fonction pour normaliser les noms de communes pour la comparaison
 function normalizeCommuneName(name) {
     return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]/g, "");
 }
 
+// Gestion de l'affichage de l'image du lieu
 function hideLieuImage() {
     const imgElement = document.getElementById("lieu-image");
     imgElement.removeAttribute("src");
@@ -193,6 +206,7 @@ function hideLieuImage() {
     imgElement.classList.add("hidden");
 }
 
+// Gestion de l'affichage de l'image du lieu
 function showLieuImage(lieu) {
     const imgElement = document.getElementById("lieu-image");
     if (!lieu.image) {
@@ -205,12 +219,14 @@ function showLieuImage(lieu) {
     imgElement.classList.remove("hidden");
 }
 
+// Fonction pour afficher les détails du lieu après la réponse
 function showLieuDetails(lieu) {
     showLieuImage(lieu);
     document.getElementById("anecdote-text").textContent = lieu.anecdote;
     document.getElementById("feedback-box").classList.remove("hidden");
 }
 
+// Fonction pour révéler l'emplacement du lieu sur la carte
 function revealLandmarkLocation(lieu) {
     const targetLatLng = L.latLng(lieu.lat, lieu.lng);
     L.circleMarker(targetLatLng, {
@@ -222,6 +238,7 @@ function revealLandmarkLocation(lieu) {
     }).addTo(roundLayer);
 }
 
+// Fonction pour gérer l'échec de la question si l'utilisateur quitte la page
 function failCurrentQuestion() {
     if (!activeMode || !canClick) return;
 
@@ -310,6 +327,7 @@ document.getElementById("next-btn").addEventListener("click", () => {
     }
 });
 
+// Fonction pour terminer le jeu et afficher le score final
 function endGame() {
     roundLayer.clearLayers();
     document.getElementById("question-box").classList.add("hidden");
