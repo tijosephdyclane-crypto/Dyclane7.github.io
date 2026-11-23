@@ -348,7 +348,7 @@ function endGame() {
             localStorage.setItem("geoguyane_best_score", bestScore);
         }
         document.getElementById("best-score").textContent = bestScore;
-        message += " Nouveau record enregistré ! 🏆";
+        message += " Nouveau record enregistré ! ";
     }
     document.getElementById("final-summary").textContent = message;
 }
