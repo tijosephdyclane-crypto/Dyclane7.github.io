@@ -30,6 +30,7 @@ function getBestScore(mode) {
 function chooseMode(mode) {
     activeMode = mode;
     bestScore = getBestScore(mode);
+    document.getElementById("progress-label").textContent = mode === "communes" ? "Tour" : "Question";
     const mainElement = document.querySelector("main");
     mainElement.classList.remove("pre-game");
     mainElement.classList.toggle("emblematic-mode", mode === "emblematiques");
